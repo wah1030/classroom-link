@@ -5,7 +5,7 @@ const demoResources = [
 ];
 const API_URL = 'https://script.google.com/macros/s/AKfycbzECo_2mSZrWOjloQIPHygelRqSkwUTbymakhmSykwy0crrjaPjTvY3xXHxzChhc393Wg/exec';
 const $ = (s) => document.querySelector(s);
-const resourceMarkup = (items) => items.map((r) => `<div class="resource"><span class="file-icon ${r.tone}">${r.icon}</span><div><b title="${r.name}">${r.name}</b><small>${r.meta}</small></div><a class="download" href="${r.url}" onclick="event.preventDefault()">↓</a></div>`).join('');
+const resourceMarkup = (items) => items.length ? items.map((r) => `<div class="resource"><span class="file-icon ${r.tone}">${r.icon}</span><div><b title="${r.name}">${r.name}</b><small>${r.meta}</small></div><a class="download" href="${r.url}" target="_blank" rel="noopener">↓</a></div>`).join('') : '<p class="muted">No materials published yet.</p>';
 $('#resourceList').innerHTML = resourceMarkup(demoResources);
 $('#teacherResourceList').innerHTML = resourceMarkup(demoResources);
 
@@ -18,7 +18,7 @@ async function syncFromApi() {
     if (classroom.title) $('#roomTitle').textContent = classroom.title;
     if (classroom.prompt) $('#promptText').textContent = classroom.prompt;
     if (classroom.title) $('#promptTitle').textContent = classroom.title;
-    if (Array.isArray(data.resources) && data.resources.length) {
+    if (Array.isArray(data.resources)) {
       const resources = data.resources.map((file) => ({
         name: file.name,
         meta: `${file.mimeType || 'File'} · ${formatBytes(file.size)}`,
@@ -51,17 +51,17 @@ document.querySelectorAll('.switch').forEach((button) => button.addEventListener
 
 $('#copyPrompt').addEventListener('click', async () => {
   await navigator.clipboard?.writeText($('#promptText').textContent.trim());
-  $('#copyMessage').textContent = '已复制，可以贴到 ChatGPT 了';
+  $('#copyMessage').textContent = 'Copied — ready to paste into ChatGPT';
   setTimeout(() => $('#copyMessage').textContent = '', 2800);
 });
-document.querySelector('[data-action="done"]').addEventListener('click', (e) => { e.currentTarget.classList.add('selected'); $('#doneCount').textContent = '你已完成 · 18 人'; });
+document.querySelector('[data-action="done"]').addEventListener('click', (e) => { e.currentTarget.classList.add('selected'); $('#doneCount').textContent = 'You are done · 18 students'; });
 document.querySelector('[data-action="question"]').addEventListener('click', () => $('#questionBox').classList.toggle('hidden'));
-$('#sendQuestion').addEventListener('click', () => { $('#questionText').value=''; $('#questionBox').classList.add('hidden'); alert('问题已送出，老师会在控制台看到。'); });
+$('#sendQuestion').addEventListener('click', () => { $('#questionText').value=''; $('#questionBox').classList.add('hidden'); alert('Question sent. Your teacher will see it in the console.'); });
 
 $('#publishPrompt').addEventListener('click', () => {
-  $('#promptTitle').textContent = $('#teacherPromptTitle').value || '最新 Prompt';
+  $('#promptTitle').textContent = $('#teacherPromptTitle').value || 'Latest prompt';
   $('#promptText').textContent = $('#teacherPrompt').value;
-  $('#copyMessage').textContent = 'Prompt 已更新';
+  $('#copyMessage').textContent = 'Prompt updated';
   fetch(API_URL, { method: 'POST', headers: {'Content-Type': 'text/plain;charset=utf-8'}, body: JSON.stringify({action:'publishPrompt', title: $('#teacherPromptTitle').value, prompt: $('#teacherPrompt').value}) }).catch(() => {});
   document.querySelector('[data-view="student"]').click();
   setTimeout(() => $('#copyMessage').textContent = '', 2500);
@@ -78,7 +78,7 @@ $('#publishFile').addEventListener('click', () => {
     const base64 = String(reader.result).split(',')[1];
     const button = $('#publishFile');
     button.disabled = true;
-    button.textContent = '上传中…';
+  button.textContent = 'Uploading…';
     try {
       const response = await fetch(API_URL, {
         method: 'POST',
@@ -90,10 +90,10 @@ $('#publishFile').addEventListener('click', () => {
       await syncFromApi();
       document.querySelector('[data-view="student"]').click();
     } catch (error) {
-      alert('上传失败，请稍后再试。');
+      alert('Upload failed. Please try again.');
     } finally {
       button.disabled = false;
-      button.textContent = '上传并发布';
+      button.textContent = 'Upload and publish';
       $('#resourceName').value = '';
       $('#fileInput').value = '';
       $('#dropzone').querySelector('b').textContent = '拖文件到这里';
