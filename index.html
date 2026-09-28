@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Classroom Link</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">CL</span><div><strong>Classroom Link</strong><small>你的现场教学空间</small></div></div>
+      <div class="top-actions"><span class="live-dot"></span><span id="headerStatus">正在进行中</span><button class="icon-button" aria-label="通知">⌁</button><div class="avatar">W</div></div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div>
+          <p class="eyebrow">AI PROMPT WORKSHOP · ROOM 001</p>
+          <h1 id="roomTitle">ChatGPT Prompt 实战课堂</h1>
+          <p class="hero-copy">欢迎来到今天的课堂。这里会实时收到老师发布的 Prompt、文件和课堂提醒。</p>
+        </div>
+        <div class="room-meta"><span class="status-pill"><span class="live-dot"></span> Live now</span><span>28 位同学在线</span></div>
+      </section>
+
+      <div class="view-switch" role="tablist"><button class="switch active" data-view="student">学生画面</button><button class="switch" data-view="teacher">老师控制台</button></div>
+
+      <section id="studentView" class="view-grid">
+        <div class="main-column">
+          <article class="card prompt-card">
+            <div class="card-heading"><div><span class="section-label">最新发布 · 2 分钟前</span><h2 id="promptTitle">万能 Prompt 框架</h2></div><span class="new-badge">NEW</span></div>
+            <pre id="promptText" class="prompt-text">你是一名资深的 {{角色}}。
+请针对 {{目标}}，为 {{受众}} 提供一份清晰、可执行的方案。
+请使用：背景 → 目标 → 步骤 → 范例的结构回答。</pre>
+            <div class="prompt-actions"><button class="primary" id="copyPrompt">复制 Prompt <span>↗</span></button><span id="copyMessage" class="copy-message"></span></div>
+          </article>
+
+          <article class="card"><div class="card-heading"><div><span class="section-label">课堂互动</span><h2>跟上老师的节奏</h2></div></div><div class="interaction-row"><button class="interaction" data-action="done"><span>✓</span><b>我已完成</b><small id="doneCount">17 人</small></button><button class="interaction" data-action="question"><span>?</span><b>我要提问</b><small>匿名也可以</small></button></div><div id="questionBox" class="question-box hidden"><textarea id="questionText" placeholder="写下你的问题……"></textarea><button class="primary" id="sendQuestion">送出问题</button></div></article>
+
+          <article class="card"><div class="card-heading"><div><span class="section-label">课堂公告</span><h2>老师的话</h2></div><span class="muted">今天 10:32</span></div><p class="announcement">等一下我会上传一个案例文件，大家可以下载后跟着一起做。完成后请按「我已完成」。</p></article>
+        </div>
+
+        <aside class="side-column"><article class="card"><div class="card-heading"><div><span class="section-label">本堂课资料</span><h2>Resources</h2></div><span class="count">3</span></div><div id="resourceList" class="resource-list"></div><button class="ghost full">查看全部资料 →</button></article><article class="card compact"><div class="qr-placeholder"><span>▦</span><b>扫描加入本课堂</b><small>Room 001 · classroom.link</small></div></article></aside>
+      </section>
+
+      <section id="teacherView" class="teacher-view hidden">
+        <div class="teacher-toolbar"><div><p class="eyebrow">TEACHER CONTROL PANEL</p><h2>课堂控制台</h2><p class="muted">发布后，学生页面会自动更新。</p></div><button class="outline">复制学生链接 ↗</button></div>
+        <div class="teacher-grid"><article class="card editor-card"><span class="section-label">发布 Prompt</span><input id="teacherPromptTitle" value="万能 Prompt 框架" /><textarea id="teacherPrompt" rows="9">你是一名资深的 {{角色}}。
+请针对 {{目标}}，为 {{受众}} 提供一份清晰、可执行的方案。
+请使用：背景 → 目标 → 步骤 → 范例的结构回答。</textarea><button class="primary full" id="publishPrompt">发布到学生画面</button></article><article class="card editor-card"><span class="section-label">上传课堂资料</span><div id="dropzone" class="dropzone"><span>＋</span><b>拖文件到这里</b><small>或点击选择电脑里的档案</small><input id="fileInput" type="file" hidden /></div><div class="upload-row"><input id="resourceName" placeholder="资料显示名称" /><button class="outline" id="chooseFile">选择文件</button></div><button class="primary full" id="publishFile">上传并发布</button><p class="helper">正式版会自动把档案存进这堂课专属的 Google Drive 文件夹。</p></article></div>
+        <article class="card teacher-resources"><div class="card-heading"><div><span class="section-label">已发布资料</span><h2>学生可下载</h2></div><span class="count" id="teacherResourceCount">3</span></div><div id="teacherResourceList" class="resource-list"></div></article>
+      </section>
+    </main>
+    <footer><span>Classroom Link · 免费教学空间</span><span>资料由老师发布，学生只读下载</span></footer>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
