@@ -1,8 +1,4 @@
-const demoResources = [
-  {name:'Prompt Template.pdf', meta:'PDF · 1.2 MB', icon:'▤', tone:'', url:'#'},
-  {name:'案例练习文件.zip', meta:'ZIP · 4.8 MB', icon:'⌁', tone:'green', url:'#'},
-  {name:'课堂笔记与链接', meta:'Google Doc', icon:'▱', tone:'orange', url:'#'}
-];
+const demoResources = [];
 const API_URL = 'https://script.google.com/macros/s/AKfycbzECo_2mSZrWOjloQIPHygelRqSkwUTbymakhmSykwy0crrjaPjTvY3xXHxzChhc393Wg/exec';
 const $ = (s) => document.querySelector(s);
 const resourceMarkup = (items) => items.length ? items.map((r) => `<div class="resource"><span class="file-icon ${r.tone}">${r.icon}</span><div><b title="${r.name}">${r.name}</b><small>${r.meta}</small></div><a class="download" href="${r.url}" target="_blank" rel="noopener">↓</a></div>`).join('') : '<p class="muted">No materials published yet.</p>';
